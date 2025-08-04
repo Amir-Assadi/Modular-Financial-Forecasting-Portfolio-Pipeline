@@ -1,0 +1,186 @@
+features:
+  price_features:
+    - returns
+    - returns_lag_1
+    - returns_lag_3
+    - returns_lag_5
+    - rolling_volatility_5d
+    - rolling_volatility_10d
+    - momentum
+    - momentum_lag_1
+    - momentum_lag_3
+    - momentum_lag_5
+  regime_features:
+    - regime
+    - prob_state_0
+    - prob_state_1
+    - prob_state_2
+    - regime_confidence
+    - regime_entropy
+    - macd
+    - rsi_14 
+    - sma_10
+    - sma_50
+    - sma_150
+  composite_features:
+    - zscore_returns
+    - rolling_sharpe
+    - drawdown
+  macro_features:
+    - interest_rate
+    - inflation
+    - vix_index
+
+feature_flags:
+  enable_drawdown: true
+  enable_entropy: true
+
+target:
+  type: classification  # or classification
+  horizons: [1]  # 1d
+  variables:        # List of horizons (in trading days) (future_return_1d or future_return_1d_class)
+    - future_return_1d_class
+
+model: xgboost # Use flat string for model name
+
+cv:
+  strategy: timeseriessplit
+  n_splits: 5
+  shuffle: false
+  random_state: 42
+
+model_params:
+  ridge:
+    regression:
+      alpha: 1.0
+    classification:
+      C: 1.0
+      random_state: 42
+
+  random_forest:
+    regression:
+      n_estimators: 100
+      max_depth: 5
+      random_state: 42
+    classification:
+      n_estimators: 100
+      max_depth: 5
+      random_state: 42
+
+  gradient_boosting:
+    regression:
+      n_estimators: 100
+      learning_rate: 0.1
+      random_state: 42
+    classification:
+      n_estimators: 100
+      learning_rate: 0.1
+      random_state: 42
+
+  svm:
+    regression:
+      C: 1.0
+      kernel: rbf
+    classification:
+      C: 1.0
+      kernel: rbf
+      probability: true
+
+  xgboost:
+    regression:
+      n_estimators: 200
+      max_depth: 3
+      learning_rate: 0.1
+      subsample: 1.0
+      colsample_bytree: 1.0
+      n_jobs: -1
+      random_state: 42
+    classification:
+      n_estimators: 200
+      max_depth: 3
+      learning_rate: 0.1
+      subsample: 1.0
+      colsample_bytree: 1.0
+      n_jobs: -1
+      random_state: 42
+
+hyperparam_grid:
+  ridge:
+    regression:
+      alpha: [0.01, 0.1, 1, 10]
+    classification:
+      C: [0.01, 0.1, 1, 10]
+      random_state: [42]
+
+  random_forest:
+    regression:
+      n_estimators: [100, 200]
+      max_depth: [3, 5, 10]
+      random_state: [42]
+    classification:
+      n_estimators: [100, 200]
+      max_depth: [3, 5, 10]
+      random_state: [42]
+
+  gradient_boosting:
+    regression:
+      n_estimators: [100, 200]
+      learning_rate: [0.01, 0.1]
+      random_state: [42]
+    classification:
+      n_estimators: [100, 200]
+      learning_rate: [0.01, 0.1]
+      random_state: [42]
+
+  svm:
+    regression:
+      C: [0.1, 1, 10]
+      kernel: ["rbf", "linear"]
+    classification:
+      C: [0.1, 1, 10]
+      kernel: ["rbf", "linear"]
+      probability: [true]
+
+  xgboost:
+    regression:
+      n_estimators: [100, 200, 500]
+      max_depth: [3, 5]
+      learning_rate: [0.05, 0.1]
+      subsample: [0.8, 1.0]
+      colsample_bytree: [1.0]
+      n_jobs: [-1]
+      random_state: [42]
+    classification:
+      n_estimators: [100, 200, 500]
+      max_depth: [3, 5]
+      learning_rate: [0.05, 0.1]
+      subsample: [0.8, 1.0]
+      colsample_bytree: [1.0]
+      n_jobs: [-1]
+      random_state: [42]
+
+metrics:
+  regression:
+    - rmse
+    - mae
+    - r2
+  classification:
+    - accuracy
+    - precision
+    - recall
+    - f1_score
+    - roc_auc
+
+refit_metric: accuracy  # or accuracy for classification
+
+logging:
+  level: INFO
+  log_to_file: true
+
+training:
+  test_size: 0.2
+  validation_size: 0.1
+  scale_features: true
+  time_index: Date
+  lookback_window: 50
+  impute_missing: true

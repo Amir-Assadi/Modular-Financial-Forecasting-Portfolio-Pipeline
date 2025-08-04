@@ -1,0 +1,63 @@
+tickers:
+  - NVDA
+  - MSFT
+  - AMD
+  - MRK
+  - SPY
+  - META
+  - AMZN
+
+date_range:
+  start: "2023-01-01"
+  end: today
+
+benchmark: "SPY"
+
+capital:
+  amount: 18000
+  currency: GBP
+
+expected_returns:
+  method: manual_price  #options: manual, manual_price, mean_return.
+  manual_values:
+    NVDA: 170
+    MSFT: 540
+    AMD: 160
+    MRK: 98
+    SPY: 660
+    META: 790
+    AMZN: 250
+
+covariance:
+  method: sample            # options: sample, ledoit-wolf, ewma
+  ewma_lambda: 0.94
+
+objective:
+  type: max_sharpe          # options: min_volatility, max_sharpe, risk_parity
+  risk_free_rate: 0.04
+
+constraints:
+  weight_sum: true         # Enforce weights sum to 1
+  allow_short: false       # If false, weights >= 0
+  bounds:
+    MSFT: [0.0, 1.0]
+    NVDA: [0.0, 1.0]
+    AMD: [0.0, 1.0]
+    MRK: [0.0, 1.0]
+    SPY: [0.0, 1.0]
+    META: [0.0, 1.0]
+    AMZN: [0.0, 1.0]
+    default: [0.0, 1.0]
+
+risk_metrics:
+  - volatility
+  - sharpe_ratio
+  - max_drawdown
+  - sortino_ratio
+  - beta
+  - alpha 
+
+rolling_metrics:
+  enabled: true
+  window: 63
+  output_path: "risk_metrics_rolling.csv"

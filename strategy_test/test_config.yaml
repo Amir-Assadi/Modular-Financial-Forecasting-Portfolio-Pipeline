@@ -1,0 +1,247 @@
+strategies:
+  - name: "sharpe_ratio_rebalance"
+    tickers:
+      - NVDA
+      - V
+      - AAPL
+      - JNJ  
+      - UNH
+      - XOM
+      - JPM
+      - WMT
+      - HD
+      - KO
+      - T
+      - MA
+      - CSCO
+      - ORCL
+      - IBM
+      - CVX
+      - ABT
+      - MCD
+      - C
+      - BA
+      - LLY
+      - AVGO
+      - GILD
+      - COST
+      - CVS
+      - MSFT
+      - AMD
+      - MRK
+      - SPY
+      - META
+      - AMZN
+      - NFLX
+      - ADBE
+      - LRCX
+      - KLAC
+      - CDNS
+      - WMT
+      - ABBV
+      - NVO
+      - ASML
+      - WFC
+      - NVS
+      - ABT
+      - SHEL 
+      - MS 
+      - MCD 
+      - HSBC 
+      - BLK 
+
+    capital:
+      amount: 10000
+      currency: GBP
+    start: "2023-06-05"
+    end: "today"
+    benchmark: "SPY"
+    risk_free_rate: 0.02
+    rebalance: 5
+    lookback_mean_return: 252
+    max_weights: 0.5
+    transaction_cost: 0.001
+    slippage: [-0.0002, 0.0002]
+
+  - name: "mean_reversion"
+    tickers:
+      - NVDA
+      - V
+      - AAPL
+      - JNJ
+      - UNH
+      - AMD
+      - META
+      - AMZN
+      - NFLX
+      - ADBE
+      - CASH
+      - SPY
+      - GOOGL
+      - MSFT
+      - LRCX
+      - PLTR
+      - KLAC
+      - CDNS
+      - AMAT
+      - GILD
+      - SBUX
+      - LMT
+      - SCHW
+      - COST
+      - CVS
+      - ADP
+      - CHTR
+      - BA
+      - LLY
+
+    capital:
+      amount: 10000
+      currency: GBP
+    start: "2018-06-05"
+    end: "today"
+    benchmark: "SPY"
+    risk_free_rate: 0.02
+    rebalance: 5
+    lookback: 1500 # lookback window for regression and std calculation or full_period
+    transaction_cost: 0.001
+    slippage: [-0.0002, 0.0002]
+
+    # Per-ticker max allocation (as a fraction of total capital)
+    max_weights:
+      NVDA: 0.1
+      GOOGL: 0.1
+      MSFT: 0.1
+      SPY: 0.1
+      V: 0.1
+      AAPL: 0.1
+      JNJ: 0.03
+      UNH: 0.03
+      AMD: 0.1
+      META: 0.1
+      AMZN: 0.1
+      NFLX: 0.05
+      ADBE: 0.05
+      LRCX: 0.05
+      KLAC: 0.05
+      CDNS: 0.05
+      PLTR: 0.05
+      AMAT: 0.05
+      GILD: 0.05
+      SBUX: 0.05
+      LMT: 0.05
+      SCHW: 0.05
+      COST: 0.05
+      CVS: 0.05
+      ADP: 0.05
+      CHTR: 0.05
+      BA: 0.05
+      LLY: 0.05
+
+    # Channel boundaries as std from mean 
+    lower_1st: 0.5
+    lower_2nd: 2.5
+    upper_1st: 0.5
+    upper_2nd: 2
+
+    # Number of steps between 1st and 2nd std for gradual buying/selling
+    fill_steps: 10
+
+  - name: "region_scaled_mean_reversion"
+    tickers:
+      - NVDA
+      - V
+      - AAPL
+      - JNJ
+      - UNH
+      - AMD
+      - META
+      - AMZN
+      - NFLX
+      - ADBE
+      - CASH
+      - SPY
+      - GOOGL
+      - MSFT
+      - LRCX
+      - PLTR
+      - KLAC
+      - CDNS
+      - AMAT
+      - GILD
+      - SBUX
+      - LMT
+      - SCHW
+      - COST
+      - CVS
+      - ADP
+      - CHTR
+      - BA
+      - LLY
+
+    capital:
+      amount: 10000
+      currency: GBP
+    start: "2018-06-05"
+    end: "today"
+    benchmark: "SPY"
+    risk_free_rate: 0.02
+    rebalance: 1
+    lookback: 1500
+    transaction_cost: 0.001
+    slippage: [-0.0002, 0.0002]
+
+    max_weights:
+      NVDA: 0.0357
+      GOOGL: 0.0357
+      MSFT: 0.0357
+      SPY: 0.0357
+      V: 0.0357
+      AAPL: 0.0357
+      JNJ: 0.0357
+      UNH: 0.0357
+      AMD: 0.0357
+      META: 0.0357
+      AMZN: 0.0357
+      NFLX: 0.0357
+      ADBE: 0.0357
+      LRCX: 0.0357
+      KLAC: 0.0357
+      CDNS: 0.0357
+      PLTR: 0.0357
+      AMAT: 0.0357
+      GILD: 0.0357
+      SBUX: 0.0357
+      LMT: 0.0357
+      SCHW: 0.0357
+      COST: 0.0357
+      CVS: 0.0357
+      ADP: 0.0357
+      CHTR: 0.0357
+      BA: 0.0357
+      LLY: 0.0357
+
+    lower_1st: 0.8
+    lower_2nd: 1.5
+    upper_1st: 0.8
+    upper_2nd: 1.5
+
+    region_multipliers:
+      beyond_l2:
+        buy: 7
+        take_profit: 0
+      l1_l2:
+        buy: 4
+        take_profit: 0
+      mean_l1:
+        buy: 0.5
+        take_profit: 0.00002
+      mean_u1:
+        buy: 0.06
+        take_profit: 0.00006
+      u1_u2:
+        buy: 0.02
+        take_profit: 0.03
+      beyond_u2:
+        buy: 0.003
+        take_profit: 0.15
