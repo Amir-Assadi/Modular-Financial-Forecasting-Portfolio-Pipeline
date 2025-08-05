@@ -349,7 +349,7 @@ All pipeline steps are controlled via YAML config files:
 ## Logging
 
 All modules use a central logger (`utils/logger.py`).  
-Logs are printed to console and/or saved to file for debugging and audit.
+Logs are printed to console for debugging and audit.
 
 ---
 
@@ -647,5 +647,6 @@ FileNotFoundError: config file not found
 - Verify transaction costs are applied
 - Review strategy logic for bugs
 - Compare with benchmark performance
+
 
 ---
